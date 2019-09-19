@@ -1,74 +1,50 @@
-Assignment 3 - Persistence: Two-tier Web Application with Flat File Database, Express server, and CSS template
-===
+## Triage V2
 
-Due: September 16th, by 11:59 AM.
-
-This assignnment continues where we left off, extending it to use the most popular Node.js server framework (express), a flat file database suitable for small applications (lowdb), and a CSS application framework / template of your choice (Boostrap, Material Design, Semantic UI, Pure etc.)
+Try it out at https://a3-jcharante.glitch.me
 
 
-Baseline Requirements
----
+Web App Source Code: https://github.com/JCharante/triage-spa-v2
 
-Your application is required to implement the following functionalities:
+API Server Source Code: https://github.com/JCharante/triage-server-v2
 
-- a `Server`, created using Express (no alternatives will be accepted for this assignment)
-- a `Results` functionality which shows the entire dataset residing in the server's memory
-- a `Form/Entry` functionality which allows users to add, modify, and delete data items (must be all three!) associated with their user name / account.
-- Use of at least five [Express middleware packages](https://expressjs.com/en/resources/middleware.html). Explore! 
-- Basic authentication using the [Passport middleware](http://www.passportjs.org) for Express (this counts as one of your five middleware packages). We encourage using the Local strategy, but OAuth (Open Authentication) can also be used for additional technical achievement. The course staff cannot help you with the various flavors of OAuth strategies. YOU MUST PROVIDE US WITH ACCOUNT CREDENTIALS TO LOGIN TO YOUR APPLICATION IF YOU USE OAUTH. The course staff cannot be expected to have credentials for any particular OAuth service.
-- Persistent data storage in between server sessions. [lowdb](https://github.com/typicode/lowdb) is a suitable database package for this assignment and will be discussed in class.
-- Use of a [CSS framework or template](https://github.com/troxler/awesome-css-frameworks). This should do the bulk of your styling/CSS for you and be appropriate to your application. For example, don't use [NES.css](https://nostalgic-css.github.io/NES.css/) (which is awesome!) unless you're creating a game or some type of retro 80s site.
+Despite there being two repositories, the webapp and API server are on the same glitch project.
 
-Your application is required to demonstrate the use of the following concepts:
+Triage helps you keep track of tasks you have to do. It has support for recommended deadlines, and hard deadlines, as for many classes they have recommend doing certain problems after lecture but may only collect homework once a week. There's support for multiple levels of importance and for difficulty. It uses all of the just mentioned filed to calculate a priority score, which is displayed on the web app and is used to sort the list of tasks. This differentiates itself from other existing options.
 
-HTML:
-- HTML input tags and form fields of various flavors (`<textarea>`, `<input>`, checkboxes, radio buttons etc.)
-- HTML that can display all data *for a particular authenticated user*. Note that this is different from the last assignnment, which required the display of all data in memory on the server.
+Sound familiar? This is because it's a rewrite from last week.
 
-Note that it might make sense to have two simple pages for this assignment, one that handles login / authentication, and one that contains the rest of your application. For this assignment, it is acceptable to simply create new user accounts upon login if none exist, however, you must alert your users to this fact. If you're not using OAuth 
+![image](https://user-images.githubusercontent.com/13973198/65221797-bac08800-da8b-11e9-86f0-606fff259c5b.png)
 
-CSS:
-- CSS styling should primarily be provided by your chosen template/framework. Oftentimes a great deal of care has been put into designing CSS templates; don't override their stylesheets unless you are extremely confident in your graphic design capabilities. The idea is to use CSS templates that give you a professional looking design aesthetic without requiring you to be a graphic designer yourself.
 
-JavaScript:
-- At minimum, a small amount of front-end JavaScript to get / fetch data from the server. See the [previous assignment](https://github.com/cs4241-19a/a2-shortstack) for reference.
+Originally I attempted to have this work out of two glitch.me's. Unfortunate I couldn't fix the cors issues that would randomly happen, so I used express.static to serve the files. Originally I avoided it because it seems like a pain, but both solutions required unzipping a zip file, and thankfully express.static works very well.
 
-Node.js:
-- A server using Express, at least five pieces of Express middleware, and a persistent database (a flat file using lowdb is great).
+I used Quasar Framework. It's more than just a CSS Framework. It has implemented Material Design components, but it also comes with pre-configured webpack and stylus among other things.
 
-Deliverables
----
+For authentication, users can log in or create an account to receive a sessionKey, which are saved in MongoDB. We wanted to use a document store storage solution because of the flexibility with being able to support new fields on the client without making any additional changes to the server.
 
-Do the following to complete this assignment:
+Usage of middleware:
 
-1. Implement your project with the above requirements. A good potential starting point is to use the "hello-express" project template inside of Glitch; this appears as an option when you hit the "New Project" button. Use the work you did in the last assignment as a reference to implement functionality, as well as the notes from class on 9/9 and 9/12.
-2. If you developed your project locally, deploy your project to Glitch, and fill in the appropriate fields in your package.json file.
-3. Test your project to make sure that when someone goes to your main page on Glitch, it displays correctly.
-4. Ensure that your project has the proper naming scheme `a3-yourname` so we can find it.
-5. Fork this repository and modify the README to the specifications below. You do not need to include any of your project files in this repo (we will see those on Glitch), you only need to update and commit the README file.
-6. Create and submit a Pull Request to the original repo. Name the pull request using the following template: `a3-gitname-firstname-lastname`.
-
-Sample Readme (delete the above when you're ready to submit, and modify the below so with your links and descriptions)
----
-
-## Your Web Application Title
-
-your glitch link e.g. http://a3-charlieroberts.glitch.me
-
-Include a very brief summary of your project here. Images are encouraged, along with concise, high-level text. Be sure to include:
-
-- the goal of the application
-- challenges you faced in realizing the application
-- what authentication strategy / database you chose to use and why (choosing one because it seemed the easiest to implement is perfectly acceptable)
-- what CSS framework you used and why.
-  - include any modifications to the CSS framework you made via custom CSS you authored.
-- the five Express middleware packages you used and a short (one sentence) summary of what each one does.
+- cors
+  - This is used during development, especially when we don't need to run the local api server but want to make API calls from our locally client.
+- body-parser
+  - This is used to help parse urlencoded data that we receive
+- express
+  - We use the json parser and the static middlewares to serve the website
+- morgan
+  - We use this to log requests to our server
+- passport
+  - We use this to handle user credentials
+  
+Meeting requirements:
+  - HTML Input Tags and Forms
+    - We have a Floating Action Button (FAB) on the lower right corner to add new items
+    - We use dropdown lists for selecting difficulty, importance, and status
+    - We have buttons to log in or confirm prompts
+    - We have input boxes to enter credentials or data
+    - We have date choosers
+  - There is code on the server to write, modify, and delete tasks.
 
 ## Technical Achievements
-- **Tech Achievement 1**: I used OAuth authentication via the GitHub strategy
-- **Tech Achievement 2**: I used over ten Express middleware packages, enabling me to create a server that...
-
-### Design/Evaluation Achievements
-- **Design Achievement 1**: I tested my application using screen reading software, and found that...
-- **Design Achievement 2**: I followed best practices for accessibility, including providing alt attributes for images and using semantic HTML. There are no `<div>` or `<span>` elements in my document.
-- **Design Achievement 3**: We tested the application with n=X users, finding that...
+- **MongoDB**: I used the Node.js driver for MongoDB, enabling me to quickly write the backend code with its easy queries and have the peace of mind with its data duplications, rather than storing it on the FS on glitch.
+- **Soft Deletes**: Since it's trendy to not actually delete a user's data, when you click to delete a task, we perform a soft delete where the data is no longer returned by the API, but is still available for data harvesting.
+- **Local Storage**: To improve UX, I am storing the sessionKey to the local storage and clearing it on log out so that when you refresh the page you don't have to log in again, as I am using sessionKeys generated on login/signup rather than cookies.
